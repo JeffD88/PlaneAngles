@@ -1,0 +1,41 @@
+###############################################################################
+# NETHook function table			
+###############################################################################
+#
+# Name		: PlaneAngles.ft
+# NETHook 	: PlaneAngles.dll
+# Date		: 
+# Author	: 
+# Notes		:  ** Update all PROJECT_NAME references with the projects name **
+# Language	: C#
+#
+###############################################################################
+
+
+######################
+# ASSIGN A UNIQUE NAME
+######################
+APPLICATION "__PlaneAngles__"
+
+######################
+# NETHook LOCATION
+######################
+#
+# Update paths below to match your install path and project name.
+FUNC_DLL   "CHOOKS\PlaneAngles.dll"
+RES_DLL    "SAME"
+dnRES_NAME "PlaneAngles.FunctionTable.Resource"
+CATEGORY   "MY NET-HOOK"
+
+##############################################################################
+# Public functions here
+##############################################################################
+#
+# The main system entry point defined in NethookMain.cs
+FUNCTION NET "Run"
+    dnSPNG "PlaneAngle16"
+    dnLPNG "PlaneAngle32"
+    dnTIP  "RunTip"
+END_FUNCTION
+
+# EOF
