@@ -138,6 +138,24 @@
   <data name="CLabel" xml:space="preserve">
     <value>C:</value>
   </data>
+  <data name="PlanesToolTipContent" xml:space="preserve">
+    <value>A list of the planes found in the Mastercam part file.</value>
+  </data>
+  <data name="PlanesToolTipHeader" xml:space="preserve">
+    <value>Planes</value>
+  </data>
+  <data name="RefreshToolTipContent" xml:space="preserve">
+    <value>Refreshes the list of the planes found in the Mastercam part file.</value>
+  </data>
+  <data name="RefreshToolTipHeader" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="SwapToolTipContent" xml:space="preserve">
+    <value>Swaps the current solution to the alternate solution.</value>
+  </data>
+  <data name="SwapToolTipHeader" xml:space="preserve">
+    <value>Swap</value>
+  </data>
   <data name="WindowTitle" xml:space="preserve">
     <value>Plane Angles</value>
   </data>

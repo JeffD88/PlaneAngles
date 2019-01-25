@@ -24,22 +24,23 @@ namespace PlaneAngles
         /// <returns>A <c>MCamReturn</c> return type representing the outcome of your NetHook application.</returns>
         public override MCamReturn Run(int param)
         {
-            var container = new StandardKernel();
-
-            container.Bind<IAngleService>().To<AngleService>();
-            container.Bind<ISearchService>().To<SearchService>();
-
-            var view = new MainView
+            using (var container = new StandardKernel())
             {
-                DataContext = container.Get<MainViewViewModel>()
-            };
+                container.Bind<IAngleService>().To<AngleService>();
+                container.Bind<ISearchService>().To<SearchService>();
 
-            var windowHelper = new WindowInteropHelper(view)
-            {
-                Owner = MastercamWindow.GetHandle().Handle
-            };
+                var view = new MainView
+                {
+                    DataContext = container.Get<MainViewViewModel>()
+                };
 
-            view.Show();
+                var windowHelper = new WindowInteropHelper(view)
+                {
+                    Owner = MastercamWindow.GetHandle().Handle
+                };
+
+                view.Show();
+            }
 
             return MCamReturn.NoErrors;
         }

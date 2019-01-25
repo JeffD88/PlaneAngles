@@ -1,14 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="CNC Software, Inc.">
-//   Copyright (c) 2017 CNC Software, Inc.
-// </copyright>
-// <summary>
-//  If this project is helpful please take a short survey at ->
-//  http://ux.mastercam.com/Surveys/APISDKSupport 
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace PlaneAngles.ViewModel
+﻿namespace PlaneAngles.ViewModel
 {
     using System.Windows.Input;
     using System.ComponentModel;
@@ -41,6 +31,8 @@ namespace PlaneAngles.ViewModel
 
         private string secondaryAngle;
 
+        private TiltSolution currentTiltSolution;
+
         #endregion
 
         #region Construction
@@ -53,7 +45,15 @@ namespace PlaneAngles.ViewModel
             this.PlaneAngleTitle = UIStrings.WindowTitle;
             this.AxisCombinationLabel = UIStrings.AxisCombinationLabel;
 
+            this.PlanesHeader = UIStrings.PlanesToolTipHeader;
+            this.PlanesContent = UIStrings.PlanesToolTipContent;
+            this.RefreshHeader = UIStrings.RefreshToolTipHeader;
+            this.RefreshContent = UIStrings.RefreshToolTipContent;
+            this.SwapHeader = UIStrings.SwapToolTipHeader;
+            this.SwapContent = UIStrings.SwapToolTipContent;
+
             this.UpdateViewListCommand = new DelegateCommand(this.OnUpdateViewListCommand);
+            this.SwapSolutionCommand = new DelegateCommand(this.OnSwapSolutionCommand);
 
             this.Views = searchService.GetViews();
 
@@ -75,17 +75,19 @@ namespace PlaneAngles.ViewModel
                 }
             };
 
-            this.SelectedAxisCombination = AxisCombinations[0];
+            this.currentTiltSolution = TiltSolution.Positive;
 
-            this.PrimaryAngle = SelectedAxisCombination.PrimaryAxisLabel;
-            this.SecondaryAngle = SelectedAxisCombination.SecondaryAxisLabel;
-        }
+            this.SelectedAxisCombination = AxisCombinations[0];
+            this.SelectedView = Views[0];
+    }
 
         #endregion
 
         #region Commands
 
         public ICommand UpdateViewListCommand { get; }
+
+        public ICommand SwapSolutionCommand { get; }
 
         #endregion
 
@@ -94,6 +96,18 @@ namespace PlaneAngles.ViewModel
         public string PlaneAngleTitle { get; set; }
 
         public string AxisCombinationLabel { get; set; }
+
+        public string PlanesHeader { get; set; }
+
+        public string PlanesContent { get; set; }
+
+        public string RefreshHeader { get; set; }
+
+        public string RefreshContent { get; set; }
+
+        public string SwapHeader { get; set; }
+
+        public string SwapContent { get; set; }
 
         public List<MCView> Views
         {
@@ -113,8 +127,7 @@ namespace PlaneAngles.ViewModel
             set
             {
                 this.selectedView = value;
-                if (SelectedAxisCombination != null)
-                    SetAngles();
+                SetAngles(this.currentTiltSolution);
                 OnPropertyChanged(nameof(this.SelectedView));
             }
         }
@@ -138,7 +151,7 @@ namespace PlaneAngles.ViewModel
             {
                 this.selectedAxisCombination = value;
                 if (SelectedView != null)
-                    SetAngles();
+                    SetAngles(this.currentTiltSolution);
                 OnPropertyChanged(nameof(this.SelectedAxisCombination));
             }
         }
@@ -170,21 +183,63 @@ namespace PlaneAngles.ViewModel
         #region Private Methods     
 
         private void OnUpdateViewListCommand(object parameter) => this.Views = searchService.GetViews();
-      
-        private void SetAngles()
+
+        private void OnSwapSolutionCommand(object parameter)
+        {
+            if (this.SelectedView != null)
+            {
+                switch (this.currentTiltSolution)
+                {
+                    case TiltSolution.Positive:
+                        SetAngles(TiltSolution.Negative);
+                        break;
+
+                    case TiltSolution.Negative:
+                        SetAngles(TiltSolution.Positive);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+            
+        private void SetAngles(TiltSolution solution)
         {
             switch (SelectedAxisCombination.Setup)
             {
                 case RotarySetup.AC:
-                    var acSetup = angleService.CalculateAngles(SelectedView.ViewMatrix, SelectedAxisCombination.Setup);
+                    RotationAngle acSetup = null;
+
+                    if (solution == TiltSolution.Positive)
+                    {
+                        acSetup = angleService.CalculatePositiveTilt(SelectedView.ViewMatrix, SelectedAxisCombination.Setup);
+                    }
+                    else
+                    {
+                        acSetup = angleService.CalculateNegativeTilt(SelectedView.ViewMatrix, SelectedAxisCombination.Setup);
+                    }
+
                     this.SecondaryAngle = $"{SelectedAxisCombination.SecondaryAxisLabel} {acSetup.SecondaryAngle.ToString(UIStrings.AngleFormat)}";
                     this.PrimaryAngle = $"{SelectedAxisCombination.PrimaryAxisLabel} {acSetup.PrimaryAngle.ToString(UIStrings.AngleFormat)}";
+                    this.currentTiltSolution = acSetup.Solution;
                     break;
 
                 case RotarySetup.BC:
-                    var bcSetup = angleService.CalculateAngles(SelectedView.ViewMatrix, SelectedAxisCombination.Setup);
+                    RotationAngle bcSetup = null;
+
+                    if (solution == TiltSolution.Positive)
+                    {
+                        bcSetup = angleService.CalculatePositiveTilt(SelectedView.ViewMatrix, SelectedAxisCombination.Setup);
+                    }
+                    else
+                    {
+                        bcSetup = angleService.CalculateNegativeTilt(SelectedView.ViewMatrix, SelectedAxisCombination.Setup);
+                    }
+                    
                     this.SecondaryAngle = $"{SelectedAxisCombination.SecondaryAxisLabel} {bcSetup.SecondaryAngle.ToString(UIStrings.AngleFormat)}";
                     this.PrimaryAngle = $"{SelectedAxisCombination.PrimaryAxisLabel} {bcSetup.PrimaryAngle.ToString(UIStrings.AngleFormat)}";
+                    this.currentTiltSolution = bcSetup.Solution;
                     break;
 
                 default:

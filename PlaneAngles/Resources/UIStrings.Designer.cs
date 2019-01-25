@@ -124,6 +124,60 @@ namespace PlaneAngles.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A list of the planes found in the Mastercam part file..
+        /// </summary>
+        internal static string PlanesToolTipContent {
+            get {
+                return ResourceManager.GetString("PlanesToolTipContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Planes.
+        /// </summary>
+        internal static string PlanesToolTipHeader {
+            get {
+                return ResourceManager.GetString("PlanesToolTipHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refreshes the list of the planes found in the Mastercam part file..
+        /// </summary>
+        internal static string RefreshToolTipContent {
+            get {
+                return ResourceManager.GetString("RefreshToolTipContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string RefreshToolTipHeader {
+            get {
+                return ResourceManager.GetString("RefreshToolTipHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Swaps the current solution to the alternate solution..
+        /// </summary>
+        internal static string SwapToolTipContent {
+            get {
+                return ResourceManager.GetString("SwapToolTipContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Swap.
+        /// </summary>
+        internal static string SwapToolTipHeader {
+            get {
+                return ResourceManager.GetString("SwapToolTipHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plane Angles.
         /// </summary>
         internal static string WindowTitle {

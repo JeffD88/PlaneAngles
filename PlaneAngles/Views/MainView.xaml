@@ -9,6 +9,7 @@
         Height="275" 
         Width="250"
         Icon="Icon/PlaneAngle.ico"
+        WindowStartupLocation="CenterOwner"
         Title="{Binding PlaneAngleTitle}">
     <Grid Background="Transparent">
         <Grid.ContextMenu>
@@ -56,7 +57,15 @@
                       ItemsSource="{Binding Views}"
                       DisplayMemberPath="ViewName"
                       SelectedValue="{Binding SelectedView, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      IsSynchronizedWithCurrentItem="True"/>
+                      IsSynchronizedWithCurrentItem="True">
+                <ComboBox.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold"
+                                   Text="{Binding PlanesHeader}"/>
+                        <TextBlock Text="{Binding PlanesContent}"/>
+                    </StackPanel>
+                </ComboBox.ToolTip>
+            </ComboBox>
 
             <Button x:Name="UpdateButton"
                     Margin="5 0 0 0"
@@ -65,6 +74,14 @@
                     Command="{Binding UpdateViewListCommand}">
 
                 <Image Source="Images/refresh.png"/>
+                
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold"
+                                   Text="{Binding RefreshHeader}"/>
+                        <TextBlock Text="{Binding RefreshContent}"/>
+                    </StackPanel>
+                </Button.ToolTip>
             </Button>
         </StackPanel>
 
@@ -83,6 +100,26 @@
                    HorizontalAlignment="Center"
                    FontSize="22"
                    Text="{Binding PrimaryAngle}" />
+        <Button x:Name="SwapSolutionButton"
+                Grid.Row="6"
+                Grid.Column="1" 
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Center"
+                Margin="0 0 0 0"
+                Height="30"
+                Width= "60"
+                IsDefault="True"
+                Command="{Binding SwapSolutionCommand}">
+
+            <Image Source="Images/swap.png"/>
+            <Button.ToolTip>
+                <StackPanel>
+                    <TextBlock FontWeight="Bold"
+                               Text="{Binding SwapHeader}"/>
+                    <TextBlock Text="{Binding SwapContent}"/>
+                </StackPanel>
+            </Button.ToolTip>
+        </Button>
 
     </Grid>
 </Window>
